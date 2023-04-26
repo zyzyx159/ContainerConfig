@@ -1,0 +1,25 @@
+version: "3"
+
+services:
+  calibre:
+    image: lscr.io/linuxserver/calibre:latest
+    container_name: calibre
+    environment:
+      - PUID=1001 #share
+      - PGID=999 #docker
+      - TZ=America/Chicago
+    #      - PASSWORD= #optional
+    #      - CLI_ARGS= #optional
+    volumes:
+      - /zebra/share/Books:/config
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.books.entrypoints=web"
+      - "traefik.http.routers.books.rule=Host(`books.clean.barqu.xyz`)"
+      - "traefik.port=8081"
+    networks:
+      - rprox
+
+networks:
+  rprox:
+    external: true
