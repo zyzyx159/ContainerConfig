@@ -16,3 +16,13 @@ services:
       - /lookingGlass/containers/arr/gluetun:/gluetun
     env_file:
       - ./arr.env
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.nginx.rule=Host(`gluetun.clean.barqu.xyz`)"
+      - "traefik.http.routers.nginx.entrypoints=web"
+    networks:
+      - rprox
+
+networks:
+  rprox:
+    external: true
