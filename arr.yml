@@ -14,15 +14,5 @@ services:
       - 8388:8388/udp # Shadowsocks
     volumes:
       - /lookingGlass/containers/arr/gluetun:/gluetun
-    environment:
-      # See https://github.com/qdm12/gluetun/wiki
-      - VPN_SERVICE_PROVIDER=private internet access
-      - VPN_TYPE=openvpn
-      # OpenVPN:
-      - OPENVPN_USER=
-      - OPENVPN_PASSWORD=
-      # Timezone for accurate log times
-      - TZ=America/Chicago
-      # Server list updater. See https://github.com/qdm12/gluetun/wiki/Updating-Servers#periodic-update
-      - UPDATER_PERIOD=
-      - UPDATER_VPN_SERVICE_PROVIDERS=
+    env_file:
+      - ./arr.env
