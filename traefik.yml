@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  traefik:
+    image: traefik:latest
+    container_name: "traefik"
+    restart: "unless-stopped"
+    security_opt:
+      - no-new-privileges:true
+    ports:
+      # The HTTP port
+      - "80:80"
+      - "443:443"
+      # The Web UI (enabled by --api.insecure=true)
+      - "8080:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "/etc/timezone:/etc/timezone:ro"
+      - "/etc/localtime:/etc/localtime:ro"
+      - "/lookingGlass/containers/traefik/:/etc/traefik"
+    networks:
+      - "rprox"
+
+networks:
+  rprox:
+    external: true

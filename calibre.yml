@@ -12,11 +12,13 @@ services:
     #      - CLI_ARGS= #optional
     volumes:
       - /zebra/share/Books:/config
+    ports:
+      - 8081:8081
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.books.entrypoints=web"
-      - "traefik.http.routers.books.rule=Host(`books.clean.barqu.xyz`)"
-      - "traefik.port=8081"
+      - "traefik.http.routers.nginx.rule=Host(`books.clean.barqu.xyz`)"
+      - "traefik.http.routers.nginx.entrypoints=web"
+      - "traefik.http.services.nginx.loadbalancer.server.port=8081"
     networks:
       - rprox
 
