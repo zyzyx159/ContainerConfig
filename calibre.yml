@@ -1,4 +1,5 @@
-version: "3"
+---
+version: "2"
 
 services:
   calibre:
@@ -12,12 +13,17 @@ services:
     #      - CLI_ARGS= #optional
     volumes:
       - /zebra/share/Books:/config
-    ports:
-      - 8081:8081
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.books.rule=Host(`books.clean.barqu.xyz`)"
       - "traefik.http.routers.books.entrypoints=web"
+      - "traefik.http.routers.books.service=webserver_gui"
+      - "traefik.http.services.webserver_gui.loadbalancer.server.port=8081"
+
+      - "traefik.http.routers.desktopGui.rule=Host(`books.clean.barqu.xyz`)"
+      - "traefik.http.routers.desktopGui.entrypoints=web"
+      - "traefik.http.routers.desktopGui.service=desktopGui"
+      - "traefik.http.services.desktopGui.loadbalancer.server.port=8080"
     networks:
       - rprox
 
