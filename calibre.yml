@@ -16,9 +16,9 @@ services:
       - 8081:8081
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.nginx.rule=Host(`books.clean.barqu.xyz`)"
-      - "traefik.http.routers.nginx.entrypoints=web"
-      - "traefik.http.services.nginx.loadbalancer.server.port=8081"
+      - "traefik.http.routers.videos.rule=Host(`books.clean.barqu.xyz`)"
+      - "traefik.http.routers.videos.entrypoints=web"
+      - "traefik.http.services.videos.loadbalancer.server.port=8081"
     networks:
       - rprox
 

@@ -1,0 +1,30 @@
+---
+version: "3"
+services:
+  jellyfin:
+    image: lscr.io/linuxserver/jellyfin:latest
+    container_name: jellyfin
+    environment:
+      - PUID=1001 #share
+      - PGID=999 #docker
+      - TZ=America/Chicago
+    volumes:
+      - /lookingGlass/containers/Jellyfin/config:/config
+      - /zebra/share/Media/series:/data/tvshows
+      - /zebra/share/Media/movies:/data/movies
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+<<<<<<< HEAD
+      - "traefik.http.routers.videos.rule=Host(`videos.clean.barqu.xyz`)"
+      - "traefik.http.routers.videos.entrypoints=web"
+=======
+      - "traefik.http.routers.Jellyfin.entrypoints=web"      
+      - "traefik.http.routers.Jellyfin.rule=Host(`videos.clean.barqu.xyz`)"
+>>>>>>> f3e84e1c296f7ba0a8105fad5e9932488609d85c
+    networks:
+      - rprox
+
+networks:
+  rprox:
+    external: true
