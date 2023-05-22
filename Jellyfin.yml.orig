@@ -15,14 +15,9 @@ services:
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
-<<<<<<< HEAD
       - "traefik.http.routers.videos.rule=Host(`videos.clean.barqu.xyz`)"
       - "traefik.http.routers.videos.entrypoints=web"
-=======
-      - "traefik.http.routers.Jellyfin.entrypoints=web"      
-      - "traefik.http.routers.Jellyfin.rule=Host(`videos.clean.barqu.xyz`)"
->>>>>>> f3e84e1c296f7ba0a8105fad5e9932488609d85c
-    networks:
+  networks:
       - rprox
 
 networks:

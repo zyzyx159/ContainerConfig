@@ -16,9 +16,9 @@ services:
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.calibre.entrypoints=web"
-      - "traefik.http.routers.calibre.rule=Host(`books.clean.barqu.xyz`)"
-      - "traefik.http.routers.calibre.service=calibre"
+      - "traefik.http.routers.calibre-web.entrypoints=web"
+      - "traefik.http.routers.calibre-web.rule=Host(`books.clean.barqu.xyz`)"
+      - "traefik.http.routers.calibre-web.service=calibre"
     networks:
       - rprox
 
