@@ -6,7 +6,7 @@ services:
     image: nginx
     container_name: "nginx"
     volumes:
-      - ./src:/usr/share/nginx/html
+      - /lookingGlass/containers/nginx/src:/usr/share/nginx/html
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.nginx.rule=Host(`nginx.clean.barqu.xyz`)"

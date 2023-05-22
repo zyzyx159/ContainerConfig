@@ -1,0 +1,27 @@
+---
+version: "3"
+services:
+  calibre-web:
+    image: lscr.io/linuxserver/calibre-web:latest
+    container_name: calibre-web
+    environment:
+      - PUID=1001
+      - PGID=999
+      - TZ=America/Chiago
+      - DOCKER_MODS=linuxserver/mods:universal-calibre #optional
+      - OAUTHLIB_RELAX_TOKEN_SCOPE=1 #optional
+    volumes:
+      - /lookingGlass/containers/calibre-web:/config
+      - "/zebra/share/Books/Calibre Library:/books"
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.calibre.entrypoints=web"
+      - "traefik.http.routers.calibre.rule=Host(`books.clean.barqu.xyz`)"
+      - "traefik.http.routers.calibre.service=calibre"
+    networks:
+      - rprox
+
+networks:
+  rprox:
+    external: true
