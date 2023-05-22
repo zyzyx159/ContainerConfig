@@ -18,7 +18,6 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.books.rule=Host(`books.clean.barqu.xyz`)"
       - "traefik.http.routers.books.entrypoints=web"
-      - "traefik.http.services.books.loadbalancer.server.port=8081"
     networks:
       - rprox
 
