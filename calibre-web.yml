@@ -8,8 +8,8 @@ services:
       - PUID=1001
       - PGID=999
       - TZ=America/Chiago
-      - DOCKER_MODS=linuxserver/mods:universal-calibre #optional
-      - OAUTHLIB_RELAX_TOKEN_SCOPE=1 #optional
+#      - DOCKER_MODS=linuxserver/mods:universal-calibre #optional
+#      - OAUTHLIB_RELAX_TOKEN_SCOPE=1 #optional
     volumes:
       - /lookingGlass/containers/calibre-web:/config
       - "/zebra/share/Books/Calibre Library:/books"
@@ -17,8 +17,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.calibre-web.entrypoints=web"
-      - "traefik.http.routers.calibre-web.rule=Host(`books.clean.barqu.xyz`)"
-      - "traefik.http.routers.calibre-web.service=calibre"
+      - "traefik.http.routers.calibre-web.rule=Host(`books-web.clean.barqu.xyz`)"
     networks:
       - rprox
 

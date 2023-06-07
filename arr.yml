@@ -22,6 +22,16 @@ services:
     networks:
       - rprox
 
+  whoami:
+    image: traefik/whoami
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.whoami.entrypoints=web"
+      - "traefik.http.routers.whoami.rule=Host(`whoamivpn.clean.barqu.xyz`)"
+    networks:
+      - rprox
+    network_mode: "service:gluetun"
+
 networks:
   rprox:
     external: true
