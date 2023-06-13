@@ -11,6 +11,7 @@ services:
       - 8888:8888/tcp # HTTP proxy
       - 8388:8388/tcp # Shadowsocks
       - 8388:8388/udp # Shadowsocks
+      - 8090:8090 # qbittorrent
     volumes:
       - /lookingGlass/containers/arr/gluetun:/gluetun
     env_file:
@@ -28,9 +29,30 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.whoami.entrypoints=web"
       - "traefik.http.routers.whoami.rule=Host(`whoamivpn.clean.barqu.xyz`)"
-    networks:
-      - rprox
     network_mode: "service:gluetun"
+
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    network_mode: "service:gluetun"
+    environment:
+      - PUID=1001 #share
+      - PGID=999 #docker
+      - TZ=America/Chicago
+    volumes:
+      - /lookingGlass/containers/qbittorrent/config:/config
+      - /zebra/share/qbittorrent/downloads:/data/downloads
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.gluetun-qbittorrent-rtr.entrypoints=web"
+      - "traefik.http.routers.gluetun-qbittorrent-rtr.rule=Host(`qbit.clean.barqu.xyz`)" # qBittorrent
+      ## Middlewares
+#      - "traefik.http.routers.gluetun-qbittorrent-rtr.middlewares=chain-oauth@file" # qBittorrent
+      ## HTTP Services
+      - "traefik.http.routers.gluetun-qbittorrent-rtr.service=gluetun-svc" # qBittorrent
+      - "traefik.http.services.gluetun-svc.loadbalancer.server.port=8080" # qBittorrent
 
 networks:
   rprox:
