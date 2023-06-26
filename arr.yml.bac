@@ -13,10 +13,8 @@ services:
       - 8888:8888/tcp # HTTP proxy
       - 8388:8388/tcp # Shadowsocks
       - 8388:8388/udp # Shadowsocks
-#      - 8090:8090/tcp # qbittorrent was 8090:8090
-#      - 6881:6881 # qBittorrent listening port
-#      - 9696:9696 # prowlarr
-#      - 8989:8989 # sonarr TV
+      - 8090:8090 # qbittorrent was 8090:8090
+      - 9696:9696 # prowlarr
     volumes:
       - /lookingGlass/containers/arr/gluetun:/gluetun
     env_file:
@@ -27,6 +25,17 @@ services:
       - "traefik.http.routers.nginx.entrypoints=web"
     networks:
       - rprox
+
+# WHOAMI
+  whoami:
+    image: traefik/whoami
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.gluetun-vpnwhoami-rtr.entrypoints=web"
+      - "traefik.http.routers.gluetun-vpnwhoami-rtr.rule=Host(`vpnwhoami.clean.barqu.xyz`)"
+      - "traefik.http.services.gluetun-svc.loadbalancer.server.port=8090"
+#      - "traefik.http.routers.gluetun-vpnwhoami-rtr.service=gluetun-svc"
+    network_mode: "service:gluetun"
 
 # QBITTORRENT
   qbittorrent:
@@ -44,17 +53,18 @@ services:
     labels:
       - "traefik.enable=true"
       ## HTTP Routers
-      - "traefik.http.routers.gluetun-qbittorrent.entrypoints=web"
-      - "traefik.http.routers.gluetun-qbittorrent.rule=Host(`qbit.clean.barqu.xyz`)"
+      - "traefik.http.routers.gluetun-qbittorrent-rtr.entrypoints=web"
+      - "traefik.http.routers.gluetun-qbittorrent-rtr.rule=Host(`qbit.clean.barqu.xyz`)" # qBittorrent
+      ## Middlewares
+#      - "traefik.http.routers.gluetun-qbittorrent-rtr.middlewares=chain-oauth@file" # qBittorrent
       ## HTTP Services
-      - "traefik.http.routers.gluetun-qbittorrent.service=gluetun-qbittorent"
-      - "traefik.http.services.gluetun-qbittorent.loadbalancer.server.port=8080"
+      - "traefik.http.routers.gluetun-qbittorrent-rtr.service=gluetun-svc" # qBittorrent
+      - "traefik.http.services.gluetun-svc.loadbalancer.server.port=8080" # qBittorrent
 
-# PROWLARR - indexer
+# PROWLARR
   prowlarr:
     image: lscr.io/linuxserver/prowlarr:latest
     container_name: prowlarr
-    network_mode: "service:gluetun"
     environment:
       - PUID=1001
       - PGID=999
@@ -65,32 +75,30 @@ services:
       - "traefik.enable=true"
       ## HTTP Routers
       - "traefik.http.routers.gluetun-prowlarr.entrypoints=web"
-      - "traefik.http.routers.gluetun-prowlarr.rule=Host(`prowlarr.clean.barqu.xyz`)"
+      - "traefik.http.routers.gluetun-prowlarr.rule=Host(`prowlarr.clean.barqu.xyz`)" # prowlarr
+      ## Middlewares
+#      - "traefik.http.routers.gluetun-qbittorrent-rtr.middlewares=chain-oauth@file" # prowlarr
       ## HTTP Services
-      - "traefik.http.routers.gluetun-prowlarr.service=gluetun-prowlarr"
-      - "traefik.http.services.gluetun-prowlarr.loadbalancer.server.port=9696"
+      - "traefik.http.routers.gluetun-prowlarr.service=gluetun-svc" # prowlarr
+      - "traefik.http.services.gluetun-prowlarr.loadbalancer.server.port=9696" # prowlarr
     restart: unless-stopped
 
-# SONARR - TV shows
+# sonarr
   sonarr:
     image: lscr.io/linuxserver/sonarr:latest
     container_name: sonarr
-    network_mode: "service:gluetun"
     environment:
-      - PUID=1001 #share
-      - PGID=999 #docker
+      - PUID=1001
+      - PGID=999
       - TZ=America/Chicago
     volumes:
       - /lookingGlass/containers/sonarr:/config
-    labels:
-      - "traefik.enable=true"
-      ## HTTP Routers
-      - "traefik.http.routers.gluetun-sonarr.entrypoints=web"
-      - "traefik.http.routers.gluetun-sonarr.rule=Host(`sonarr.clean.barqu.xyz`)"
-      ## HTTP Services
-      - "traefik.http.routers.gluetun-sonarr.service=gluetun-sonarr"
-      - "traefik.http.services.gluetun-sonarr.loadbalancer.server.port=8989"
+      - /path/to/tvserie3s:/tv #optional
+      - /path/to/downloadclient-downloads:/downloads #optional
+    ports:
+      - 8989:8989
     restart: unless-stopped
+
 
 networks:
   rprox:
