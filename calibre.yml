@@ -12,10 +12,10 @@ services:
     #      - PASSWORD= #optional
     #      - CLI_ARGS= #optional
     volumes:
-      - /zebra/share/Books:/config
+      - /home/zebra/share/Books:/config
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.books.rule=Host(`calibre.clean.barqu.xyz`)"
+      - "traefik.http.routers.books.rule=Host(`books.clean.barqu.xyz`)"
       - "traefik.http.routers.books.entrypoints=web"
 
     networks:

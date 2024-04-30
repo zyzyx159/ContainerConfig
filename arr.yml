@@ -18,15 +18,15 @@ services:
 #      - 9696:9696 # prowlarr
 #      - 8989:8989 # sonarr TV
     volumes:
-      - /lookingGlass/containers/arr/gluetun:/gluetun
+      - /home/zyzyx/lookingGlass/containers/arr/gluetun:/gluetun
     env_file:
       - ./arr.env
     labels:
       - "traefik.enable=true"
 #      - "traefik.http.routers.nginx.rule=Host(`gluetun.clean.barqu.xyz`)"
       - "traefik.http.routers.nginx.entrypoints=web"
-    networks:
-      - rprox
+#    networks:
+#      - rprox
 
 # QBITTORRENT
   qbittorrent:
@@ -38,8 +38,8 @@ services:
       - PGID=999 #docker
       - TZ=America/Chicago
     volumes:
-      - /lookingGlass/containers/qbittorrent/config:/config
-      - /zebra/share/qbittorrent/downloads:/data/downloads
+      - /home/zyzyx/lookingGlass/containers/qbittorrent/config:/config
+      - /home/zebra/share/qbittorrent/downloads:/data/downloads
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
@@ -50,48 +50,3 @@ services:
       - "traefik.http.routers.gluetun-qbittorrent.service=gluetun-qbittorent"
       - "traefik.http.services.gluetun-qbittorent.loadbalancer.server.port=8080"
 
-# PROWLARR - indexer
-  prowlarr:
-    image: lscr.io/linuxserver/prowlarr:latest
-    container_name: prowlarr
-    network_mode: "service:gluetun"
-    environment:
-      - PUID=1001
-      - PGID=999
-      - TZ=America/Chicago
-    volumes:
-      - /lookingGlass/containers/prowlarr:/config
-    labels:
-      - "traefik.enable=true"
-      ## HTTP Routers
-      - "traefik.http.routers.gluetun-prowlarr.entrypoints=web"
-      - "traefik.http.routers.gluetun-prowlarr.rule=Host(`prowlarr.clean.barqu.xyz`)"
-      ## HTTP Services
-      - "traefik.http.routers.gluetun-prowlarr.service=gluetun-prowlarr"
-      - "traefik.http.services.gluetun-prowlarr.loadbalancer.server.port=9696"
-    restart: unless-stopped
-
-# SONARR - TV shows
-  sonarr:
-    image: lscr.io/linuxserver/sonarr:latest
-    container_name: sonarr
-    network_mode: "service:gluetun"
-    environment:
-      - PUID=1001 #share
-      - PGID=999 #docker
-      - TZ=America/Chicago
-    volumes:
-      - /lookingGlass/containers/sonarr:/config
-    labels:
-      - "traefik.enable=true"
-      ## HTTP Routers
-      - "traefik.http.routers.gluetun-sonarr.entrypoints=web"
-      - "traefik.http.routers.gluetun-sonarr.rule=Host(`sonarr.clean.barqu.xyz`)"
-      ## HTTP Services
-      - "traefik.http.routers.gluetun-sonarr.service=gluetun-sonarr"
-      - "traefik.http.services.gluetun-sonarr.loadbalancer.server.port=8989"
-    restart: unless-stopped
-
-networks:
-  rprox:
-    external: true

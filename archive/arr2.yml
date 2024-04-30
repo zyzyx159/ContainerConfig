@@ -1,0 +1,45 @@
+# PROWLARR - indexer
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr
+    network_mode: "service:gluetun"
+    environment:
+      - PUID=1000
+      - PGID=998
+      - TZ=America/Chicago
+    volumes:
+      - /lookingGlass/containers/prowlarr:/config
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.gluetun-prowlarr.entrypoints=web"
+      - "traefik.http.routers.gluetun-prowlarr.rule=Host(`prowlarr.clean.barqu.xyz`)"
+      ## HTTP Services
+      - "traefik.http.routers.gluetun-prowlarr.service=gluetun-prowlarr"
+      - "traefik.http.services.gluetun-prowlarr.loadbalancer.server.port=9695"
+    restart: unless-stopped
+
+# SONARR - TV shows
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    network_mode: "service:gluetun"
+    environment:
+      - PUID=1000 #share
+      - PGID=998 #docker
+      - TZ=America/Chicago
+    volumes:
+      - /lookingGlass/containers/sonarr:/config
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.gluetun-sonarr.entrypoints=web"
+      - "traefik.http.routers.gluetun-sonarr.rule=Host(`sonarr.clean.barqu.xyz`)"
+      ## HTTP Services
+      - "traefik.http.routers.gluetun-sonarr.service=gluetun-sonarr"
+      - "traefik.http.services.gluetun-sonarr.loadbalancer.server.port=8988"
+    restart: unless-stopped
+
+networks:
+  rprox:
+    external: true

@@ -1,4 +1,4 @@
-version: '3'
+ersion: '3'
 
 services:
   traefik:
@@ -17,7 +17,7 @@ services:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - "/etc/timezone:/etc/timezone:ro"
       - "/etc/localtime:/etc/localtime:ro"
-      - "/lookingGlass/containers/traefik/:/etc/traefik"
+      - "/home/zyzyx/lookingGlass/containers/traefik/:/etc/traefik"
     networks:
       - "rprox"
 

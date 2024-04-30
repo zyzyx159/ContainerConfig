@@ -1,0 +1,37 @@
+---
+version: "2"
+
+services:
+  calibre:
+    image: lscr.io/linuxserver/calibre:latest
+    container_name: calibre
+    environment:
+      - PUID=1001 #share
+      - PGID=999 #docker
+      - TZ=America/Chicago
+    #      - PASSWORD= #optional
+    #      - CLI_ARGS= #optional
+    volumes:
+      - /zebra/share/Books:/config
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.books.rule=Host(`books.clean.barqu.xyz`)"
+      - "traefik.http.routers.books.entrypoints=web"
+      - "traefik.http.routers.books.service=webserver_gui"
+      - "traefik.http.services.webserver_gui.loadbalancer.server.port=8081"
+
+      - "traefik.http.routers.desktopGui.rule=Host(`calibre.clean.barqu.xyz`)"
+      - "traefik.http.routers.desktopGui.entrypoints=web"
+      - "traefik.http.routers.desktopGui.service=desktopGui"
+      - "traefik.http.services.desktopGui.loadbalancer.server.port=8080"
+
+      - "traefik.http.routers.calSecure.rule=Host(`books_secure.clean.barqu.xyz`)"
+      - "traefik.http.routers.calSecure.entrypoints=websecure"
+      - "traefik.http.routers.calSecure.service=calSecure"
+      - "traefik.http.services.calSecure.loadbalancer.server.port=8181"
+    networks:
+      - rprox
+
+networks:
+  rprox:
+    external: true

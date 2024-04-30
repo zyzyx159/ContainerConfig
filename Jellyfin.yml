@@ -1,5 +1,4 @@
 ---
-version: "3"
 services:
   jellyfin:
     image: lscr.io/linuxserver/jellyfin:latest
@@ -9,9 +8,9 @@ services:
       - PGID=999 #docker
       - TZ=America/Chicago
     volumes:
-      - /lookingGlass/containers/Jellyfin/config:/config
-      - /zebra/share/Media/series:/data/tvshows
-      - /zebra/share/Media/movies:/data/movies
+      - /home/zyzyx/lookingGlass/containers/Jellyfin/config:/config
+      - /home/zebra/share/Media/series:/data/tvshows
+      - /home/zebra/share/Media/movies:/data/movies
     restart: unless-stopped
     labels:
       - "traefik.enable=true"

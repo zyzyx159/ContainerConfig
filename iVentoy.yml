@@ -1,0 +1,30 @@
+services:
+  iventoy:
+    image: ziggyds/iventoy:latest
+    container_name: iventoy
+    restart: always
+    privileged: true #must be true
+    volumes:
+      - /home/zebra/share/ISOs:/app/iso
+      - /home/zyzyx/lookingGlass/containers/iVentoy:/app/data
+    environment:
+      - AUTO_START_PXE=true
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.videos.rule=Host(`iVentoy.clean.barqu.xyz`)"
+      - "traefik.http.routers.videos.entrypoints=web"
+    networks:
+      - rprox
+
+networks:
+  rprox:
+    external: true
+
+  build:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      labels:
+        IVENTOY: 1.0.20
+      args:
+        IVENTOY: 1.0.20
