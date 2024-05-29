@@ -20,11 +20,11 @@ networks:
   rprox:
     external: true
 
-  build:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      labels:
-        IVENTOY: 1.0.20
-      args:
-        IVENTOY: 1.0.20
+#build:
+#  build:
+#    context: .
+#    dockerfile: Dockerfile
+#    labels:
+#      IVENTOY: 1.0.20
+#    args:
+#      IVENTOY: 1.0.20
