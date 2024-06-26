@@ -1,18 +1,14 @@
----
-version: "3"
-
 services:
   calibre:
     image: lscr.io/linuxserver/calibre:latest
     container_name: calibre
     environment:
-      - PUID=1001 #share
-      - PGID=999 #docker
+      - PUID=1001 #zebra
+      - PGID=990 #docker
       - TZ=America/Chicago
-    #      - PASSWORD= #optional
-    #      - CLI_ARGS= #optional
     volumes:
       - /home/zebra/share/Books:/config
+    restart: unless-stopped
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.books.rule=Host(`books.clean.barqu.xyz`)"

@@ -25,8 +25,8 @@ services:
       - "traefik.enable=true"
 #      - "traefik.http.routers.nginx.rule=Host(`gluetun.clean.barqu.xyz`)"
       - "traefik.http.routers.nginx.entrypoints=web"
-#    networks:
-#      - rprox
+    networks:
+      - rprox
 
 # QBITTORRENT
   qbittorrent:
@@ -34,12 +34,12 @@ services:
     container_name: qbittorrent
     network_mode: "service:gluetun"
     environment:
-      - PUID=1001 #share
-      - PGID=999 #docker
+      - PUID=1001 #zebra
+      - PGID=990 #docker
       - TZ=America/Chicago
     volumes:
       - /home/zyzyx/lookingGlass/containers/qbittorrent/config:/config
-      - /home/zebra/share/qbittorrent/downloads:/data/downloads
+      - /home/zyzyx/lookingGlass/containers/qbittorrent/downloads:/data/downloads
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
@@ -50,3 +50,6 @@ services:
       - "traefik.http.routers.gluetun-qbittorrent.service=gluetun-qbittorent"
       - "traefik.http.services.gluetun-qbittorent.loadbalancer.server.port=8080"
 
+networks:
+  rprox:
+    external: true

@@ -1,26 +1,38 @@
-version: '3'
-
 services:
+
   traefik:
-    image: traefik:latest
+    image: "traefik:v3.0"
     container_name: "traefik"
     restart: "unless-stopped"
     security_opt:
-      - no-new-privileges:true
+      - "no-new-privileges:true"
+    command:
+      #- "--log.level=DEBUG"
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=true"
+      - "--entryPoints.web.address=:80"
     ports:
-      # The HTTP port
       - "80:80"
-      - "443:443"
-      # The Web UI (enabled by --api.insecure=true)
       - "8080:8080"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - "/etc/timezone:/etc/timezone:ro"
       - "/etc/localtime:/etc/localtime:ro"
       - "/home/zyzyx/lookingGlass/containers/traefik/:/etc/traefik"
-    networks:
+    networks: 
       - "rprox"
 
+  whoami:
+    image: "traefik/whoami"
+    container_name: "whoami"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.whoami.rule=Host(`whoami.clean.barqu.xyz`)"
+      - "traefik.http.routers.whoami.entrypoints=web"
+    networks:
+      - "rprox"
+      
 networks:
   rprox:
     external: true

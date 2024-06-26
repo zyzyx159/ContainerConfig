@@ -1,11 +1,10 @@
----
 services:
   jellyfin:
     image: lscr.io/linuxserver/jellyfin:latest
     container_name: jellyfin
     environment:
-      - PUID=1001 #share
-      - PGID=999 #docker
+      - PUID=1001 #zebra
+      - PGID=990 #docker
       - TZ=America/Chicago
     volumes:
       - /home/zyzyx/lookingGlass/containers/Jellyfin/config:/config
