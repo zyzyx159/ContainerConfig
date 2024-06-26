@@ -1,19 +1,19 @@
 services:
   calibre:
-    image: lscr.io/linuxserver/calibre:latest
-    container_name: calibre
+    image: lscr.io/linuxserver/calibre-web:latest
+    container_name: calibre-web
     environment:
       - PUID=1001 #zebra
       - PGID=990 #docker
       - TZ=America/Chicago
     volumes:
-      - /home/zebra/share/Books:/config
+      - /home/zyzyx/lookingGlass/containers/calibre-web/config:/config
+      - /home/zebra/share/Books:/books
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.books.rule=Host(`books.clean.barqu.xyz`)"
       - "traefik.http.routers.books.entrypoints=web"
-
     networks:
       - rprox
 
