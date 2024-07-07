@@ -1,0 +1,21 @@
+services:
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    container_name: qdark
+    environment:
+      - PUID=1001 #zebra
+      - PGID=990 #docker
+      - TZ=America/Chicago
+    volumes:
+      - /home/zyzyx/lookingGlass/containers/qdark/config:/config
+      - /home/zyzyx/lookingGlass/containers/qdark/downloads:/data/downloads
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.qdark.entrypoints=web"
+      - "traefik.http.routers.qdark.rule=Host(`qdark.clean.barqu.xyz`)"
+
+networks:
+  rprox:
+    external: true
