@@ -1,0 +1,21 @@
+services:
+  metube:
+    image: ghcr.io/alexta69/metube
+    container_name: metube
+    environment:
+      - PUID=1001 #zebra
+      - PGid=990 #docker
+      - TZ=America/Chicago
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.metube.rule=Host(`metube.clean.barqu.xyz`)"
+      - "traefik.http.routers.metube.entrypoints=web"
+    volumes:
+      - /home/zebra/share/metube:/downloads
+    networks:
+      - rprox
+
+networks:
+  rprox:
+    external: true
